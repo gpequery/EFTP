@@ -9,23 +9,42 @@ int main(int argc, char *argv[]) {
 
 	int socketId = socket(AF_INET, SOCK_STREAM, 0);
 	if(socketId < 0) {
-		printf("Erreur initialisation serveur");
+		printf("\nErreur initialisation serveur\n");
 		return EXIT_FAILURE;
 	}
+
+printf("1");
 
 	struct sockaddr_in addr;
 	addr.sin_addr.s_addr = INADDR_ANY;
 	addr.sin_port = htons(port);
 	addr.sin_family = AF_INET;
 
-	int socketStatus = bind(socketId, (struct sockaddr*) &addr, sizeof(addr));
+	int socketStatus = bind(socketId, (struct sockaddr*)&addr, sizeof(addr));
 	if(socketStatus < 0) {
-		printf("Erreur status adresse");
+		printf("\nErreur status adresse\n");
 		return EXIT_FAILURE;
 	}
 
+printf("2");
 	printf("Serveur initialisé sur le port : %d", port);
 
+	if (listen(socketId, 100) < 0) {
+        	printf("\nErreur d'écoute\n");
+        	return EXIT_FAILURE;
+    	}
+
+printf("3");
+	//int newClientId = accept(socketId, NULL, NULL);
+	socklen_t addrSize = sizeof(addr);
+	int newClientId = accept(socketId, (struct sockaddr *)&addr, &addrSize);
+/*	if(newClientId < 0){
+		printf("\nErreur tentative de connexion !\n");
+		return EXIT_FAILURE;
+	}
+
+	printf("Client Connecté !");
+*/
 	printf("\n\n------------ END ------------\n");
 	return EXIT_SUCCESS;
 }

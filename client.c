@@ -10,13 +10,13 @@ int main(int argc, char *argv[]) {
 
 	int serverId = socket(AF_INET, SOCK_STREAM, 0);
 	if(serverId < 0) {
-		printf("Erreur initialisation serveur");
+		printf("\nErreur initialisation serveur\n");
 		return EXIT_FAILURE;
 	}
 
 	int socketId = socket(AF_INET, SOCK_STREAM, 0 );
 	if(socketId < 0 ) {
-		printf("Erreur status adresse");
+		printf("\nErreur status adresse\n");
 		return EXIT_FAILURE;
 	} 
 
@@ -28,13 +28,18 @@ int main(int argc, char *argv[]) {
 
 	int socketStatus = bind( socketId, (struct sockaddr *)&addr, sizeof(addr));
 	if (socketStatus < 0) {
-		printf("Erreur status adresse");
+		printf("\nErreur status adresse\n");
 		return EXIT_FAILURE;
 	}
 
 	printf("Client initialisé sur %s:%d", serverIp, port);
-
+	
+	int connectionStatus = connect(serverId, (struct sockaddr*) &addr, sizeof(addr));
+	if(connectionStatus < 0) {
+		printf("\nErreur tentative de connexion !\n");
+		return EXIT_FAILURE;
+	}
 
 	printf("\n\n------------ END ------------\n");
-	return 1;
+	return EXIT_SUCCESS;
 }
