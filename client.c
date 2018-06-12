@@ -14,9 +14,9 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	int socketId = socket(AF_INET, SOCK_STREAM, 0 );
+	int socketId = socket(AF_INET, SOCK_STREAM, 0);
 	if(socketId < 0 ) {
-		printf("\nErreur status adresse\n");
+		printf("\nErreur status adresse 1\n");
 		return EXIT_FAILURE;
 	} 
 
@@ -26,9 +26,9 @@ int main(int argc, char *argv[]) {
 	addr.sin_addr.s_addr = htonl (INADDR_ANY);
 	addr.sin_port = htons ((unsigned short)port );
 
-	int socketStatus = bind( socketId, (struct sockaddr *)&addr, sizeof(addr));
+	int socketStatus = connect( socketId, (struct sockaddr *)&addr, sizeof(addr));
 	if (socketStatus < 0) {
-		printf("\nErreur status adresse\n");
+		printf("\nErreur status adresse 2\n");
 		return EXIT_FAILURE;
 	}
 
