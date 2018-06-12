@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <netdb.h>
+#include <pthread.h>
+
+void *thread_listen(void *argument) {
+	int *socketId = argument;
+    	printf("\nSocketId du THREAD : %d\n", *socketId);
+
+	pthread_exit(NULL);
+}
 
 int main(int argc, char *argv[]) {
 	printf("------------ Serveur ------------\n\n");
@@ -25,22 +33,37 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	printf("Serveur initialisé sur le port : %d", port);
-
 	if (listen(socketId, 100) < 0) {
         	printf("\nErreur d'écoute\n");
         	return EXIT_FAILURE;
     	}
 
-	socklen_t addrSize = sizeof(addr);
+	printf("Serveur initialisé sur le port : %d", port);
+
+	/* Thread Listen connection create */
+	pthread_t threadListen;
+	if (pthread_create(&threadListen, NULL, thread_listen, &socketId)) {
+		perror("pthread_create");
+		return EXIT_FAILURE;
+	}
+
+	/* Thread Listen connection wait */
+	if (pthread_join(threadListen, NULL)) {
+		perror("pthread_join");
+		return EXIT_FAILURE;
+	}
+
+    	printf("\nAprès la création du thread.\n");
+
+	/*socklen_t addrSize = sizeof(addr);
 	int newClientId = accept(socketId, (struct sockaddr *)&addr, &addrSize);
 	if(newClientId < 0){
 		printf("\nErreur tentative de connexion !\n");
 		return EXIT_FAILURE;
 	}
 
-	printf("\nClient Connecté !\n");
+	printf("\nClient Connecté !\n");*/
 
-	printf("\n\n------------ END ------------\n");
+	printf("\n------------ END ------------\n");
 	return EXIT_SUCCESS;
 }
