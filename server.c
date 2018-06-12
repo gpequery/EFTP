@@ -13,7 +13,6 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-printf("1");
 
 	struct sockaddr_in addr;
 	addr.sin_addr.s_addr = INADDR_ANY;
@@ -26,7 +25,6 @@ printf("1");
 		return EXIT_FAILURE;
 	}
 
-printf("2");
 	printf("Serveur initialisé sur le port : %d", port);
 
 	if (listen(socketId, 100) < 0) {
@@ -34,17 +32,15 @@ printf("2");
         	return EXIT_FAILURE;
     	}
 
-printf("3");
-	//int newClientId = accept(socketId, NULL, NULL);
 	socklen_t addrSize = sizeof(addr);
 	int newClientId = accept(socketId, (struct sockaddr *)&addr, &addrSize);
-/*	if(newClientId < 0){
+	if(newClientId < 0){
 		printf("\nErreur tentative de connexion !\n");
 		return EXIT_FAILURE;
 	}
 
-	printf("Client Connecté !");
-*/
+	printf("\nClient Connecté !\n");
+
 	printf("\n\n------------ END ------------\n");
 	return EXIT_SUCCESS;
 }
