@@ -26,12 +26,6 @@ int main(int argc, char *argv[]) {
 	addr.sin_addr.s_addr = htonl (INADDR_ANY);
 	addr.sin_port = htons ((unsigned short)port );
 
-	int socketStatus = connect( socketId, (struct sockaddr *)&addr, sizeof(addr));
-	if (socketStatus < 0) {
-		printf("\nErreur status adresse 2\n");
-		return EXIT_FAILURE;
-	}
-
 	printf("Client initialisé sur %s:%d", serverIp, port);
 	
 	int connectionStatus = connect(serverId, (struct sockaddr*) &addr, sizeof(addr));

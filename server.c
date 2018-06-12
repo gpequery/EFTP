@@ -2,10 +2,26 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <pthread.h>
+#include <stdbool.h>
 
 void *thread_listen(void *argument) {
 	int *socketId = argument;
-    	printf("\nSocketId du THREAD : %d\n", *socketId);
+
+	while(true) {
+        	struct sockaddr_in newSockAddr;
+                socklen_t newSockAddrSize = sizeof(newSockAddr);
+
+                int newClientId = accept(*socketId, (struct sockaddr *)&newSockAddr, &newSockAddrSize);
+
+		/* If connection, add one client and save clientId. Add new thread for each new client to listen his message */
+                if(newClientId < 0){
+                        printf("\nErreur tentative de connexion !\n");
+                } else {
+			printf("\nTentative de connexion clientId %d : \n", newClientId);
+			//thread thread_listen_client_msg (thread_listen_msg_client_function, newClientId, allClient, countClient);
+                	//thread_listen_client_msg.detach();
+		}
+	}
 
 	pthread_exit(NULL);
 }
@@ -20,7 +36,6 @@ int main(int argc, char *argv[]) {
 		printf("\nErreur initialisation serveur\n");
 		return EXIT_FAILURE;
 	}
-
 
 	struct sockaddr_in addr;
 	addr.sin_addr.s_addr = INADDR_ANY;
@@ -52,8 +67,6 @@ int main(int argc, char *argv[]) {
 		perror("pthread_join");
 		return EXIT_FAILURE;
 	}
-
-    	printf("\nAprès la création du thread.\n");
 
 	/*socklen_t addrSize = sizeof(addr);
 	int newClientId = accept(socketId, (struct sockaddr *)&addr, &addrSize);
