@@ -1,8 +1,31 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <netdb.h>
 #include <pthread.h>
 #include <stdbool.h>
+
+void *thread_listen_message(void *argument) {
+	int *newClientId = argument;
+
+	while(true) {
+		char input[100];
+		int bytesRead, bytesWritten = 0;
+
+		memset(&input, 0, sizeof(input));
+	        bytesRead += recv(*newClientId, (char*)&input, sizeof(input), 0);
+
+		/*close current thread if client exit */
+		if(!strcmp(input, "exit")){
+			printf("\nEXIT Client : %d\n", *newClientId);
+			break;
+		} else if (strcmp(input, "")) {
+			printf("\nInput : %s\n", input);
+		}
+	}
+
+	pthread_exit(NULL);
+}
 
 void *thread_listen(void *argument) {
 	int *socketId = argument;
@@ -18,8 +41,12 @@ void *thread_listen(void *argument) {
                         printf("\nErreur tentative de connexion !\n");
                 } else {
 			printf("\nTentative de connexion clientId %d : \n", newClientId);
-			//thread thread_listen_client_msg (thread_listen_msg_client_function, newClientId, allClient, countClient);
-                	//thread_listen_client_msg.detach();
+
+			/* Thread Listen connection create */
+			pthread_t threadListenMessage;
+			if (pthread_create(&threadListenMessage, NULL, thread_listen_message, &newClientId)) {
+				printf("pthread_create thread_listen_message");
+			}
 		}
 	}
 
@@ -58,24 +85,15 @@ int main(int argc, char *argv[]) {
 	/* Thread Listen connection create */
 	pthread_t threadListen;
 	if (pthread_create(&threadListen, NULL, thread_listen, &socketId)) {
-		perror("pthread_create");
+		perror("pthread_create thread_listen");
 		return EXIT_FAILURE;
 	}
 
 	/* Thread Listen connection wait */
 	if (pthread_join(threadListen, NULL)) {
-		perror("pthread_join");
+		perror("pthread_join thread_listen");
 		return EXIT_FAILURE;
 	}
-
-	/*socklen_t addrSize = sizeof(addr);
-	int newClientId = accept(socketId, (struct sockaddr *)&addr, &addrSize);
-	if(newClientId < 0){
-		printf("\nErreur tentative de connexion !\n");
-		return EXIT_FAILURE;
-	}
-
-	printf("\nClient Connecté !\n");*/
 
 	printf("\n------------ END ------------\n");
 	return EXIT_SUCCESS;

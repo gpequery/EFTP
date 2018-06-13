@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <netdb.h>
+#include <stdbool.h>
 
 int main(int argc, char *argv[]) {
 	printf("------------ Client ------------\n\n");
@@ -34,6 +36,24 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	printf("\n\n------------ END ------------\n");
+	printf("\nConnexion avec le serveur réussis !\n");
+
+	while(true) {
+		char input[100];
+
+		printf("\nMessage : ");
+		scanf("%[^\n]%*c", input);
+
+		send(serverId, input, sizeof(input), 0);
+		if(!strcmp(input, "exit")){
+			printf("\nEXIT !!\n");
+			break;
+		} else {
+			printf("\nSend : %s\n", input);
+		}
+		
+	}
+
+	printf("\n------------ END ------------\n");
 	return EXIT_SUCCESS;
 }
