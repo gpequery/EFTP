@@ -23,10 +23,9 @@ int main(int argc, char *argv[]) {
 	} 
 
 	struct sockaddr_in addr;
-	int len = sizeof(addr); 
 	addr.sin_family = AF_INET ;
 	addr.sin_addr.s_addr = htonl (INADDR_ANY);
-	addr.sin_port = htons ((unsigned short)port );
+	addr.sin_port = htons ((unsigned short)port);
 
 	printf("Client initialisé sur %s:%d", serverIp, port);
 	
