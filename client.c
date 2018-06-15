@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <stdbool.h>
+#include <pthread.h>
+#include "threads.h"
+#include "functions.h"
 
 int main(int argc, char *argv[]) {
 	printf("------------ Client ------------\n\n");
@@ -36,21 +39,21 @@ int main(int argc, char *argv[]) {
 	}
 
 	printf("\nConnexion avec le serveur réussis !\n");
+	/* Thread Listen message create */
+	pthread_t threadListenMessage;
+	if (pthread_create(&threadListenMessage, NULL, thread_listen_message, &serverId)) {
+		printf("pthread_create thread_listen_message");
+	}
 
 	while(true) {
 		char input[100];
-
-		printf("\nMessage : ");
 		scanf("%[^\n]%*c", input);
 
-		send(serverId, input, sizeof(input), 0);
+		sendMessage(serverId, input);
 		if(!strcmp(input, "exit")){
 			printf("\nEXIT !!\n");
 			break;
-		} else {
-			printf("\nSend : %s\n", input);
 		}
-		
 	}
 
 	printf("\n------------ END ------------\n");

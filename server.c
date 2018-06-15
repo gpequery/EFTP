@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <pthread.h>
-#include "thread.h"
+#include "threads.h"
 
 int main(int argc, char *argv[]) {
 	printf("------------ Serveur ------------\n\n");
@@ -31,17 +31,16 @@ int main(int argc, char *argv[]) {
         	return EXIT_FAILURE;
     	}
 
-	printf("Serveur initialisé sur le port : %d", port);
 
 	/* Thread Listen connection create */
-	pthread_t threadListen;
-	if (pthread_create(&threadListen, NULL, thread_listen, &socketId)) {
-		perror("pthread_create thread_listen");
+	pthread_t threadListenConnection;
+	if (pthread_create(&threadListenConnection, NULL, thread_listen_connection, &socketId)) {
+		perror("pthread_create thread_listen_connection");
 		return EXIT_FAILURE;
 	}
 
 	/* Thread Listen connection wait */
-	if (pthread_join(threadListen, NULL)) {
+	if (pthread_join(threadListenConnection, NULL)) {
 		perror("pthread_join thread_listen");
 		return EXIT_FAILURE;
 	}
