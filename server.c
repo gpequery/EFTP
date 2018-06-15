@@ -1,11 +1,17 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <netdb.h>
 #include <pthread.h>
+#include <stdbool.h>
+#include <unistd.h>
 #include "threads.h"
+#include "functions.h"
 
 int main(int argc, char *argv[]) {
 	printf("------------ Serveur ------------\n\n");
+
+	pthread_t recvt;
 
 	const int port = argc >= 2 ? atoi(argv[1]) : 5001;
 
@@ -31,20 +37,34 @@ int main(int argc, char *argv[]) {
         	return EXIT_FAILURE;
     	}
 
+	printf("\nServeur initialisé : en attente de client\n");
 
-	/* Thread Listen connection create */
-	pthread_t threadListenConnection;
-	if (pthread_create(&threadListenConnection, NULL, thread_listen_connection, &socketId)) {
-		perror("pthread_create thread_listen_connection");
-		return EXIT_FAILURE;
+	struct sockaddr_in newSockAddr;
+        socklen_t newSockAddrSize = sizeof(newSockAddr);
+
+        int newClientId = true;
+        newClientId = accept(socketId, (struct sockaddr *)&newSockAddr, &newSockAddrSize);
+	if(newClientId < 0){
+                printf("\nErreur tentative de connexion !\n");
+		return EXIT_SUCCESS;
+        }
+
+	printf("\nClient connecté : %d\n", newClientId);
+	char input[100];
+	waitMessage(newClientId, input);
+
+	if(!strcmp(input, "BONJ")) {
+		if(connection_server(newClientId)) {
+			printf("COOOOL SERVER\n");
+		}
 	}
-
-	/* Thread Listen connection wait */
-	if (pthread_join(threadListenConnection, NULL)) {
-		perror("pthread_join thread_listen");
-		return EXIT_FAILURE;
-	}
-
+	
 	printf("\n------------ END ------------\n");
+
+	close(socketId);
 	return EXIT_SUCCESS;
+
+	/*pthread_create(&recvt,NULL,recvmg,&newClientId);
+
+	pthread_join(recvt, NULL);*/
 }
