@@ -61,18 +61,21 @@ int main(int argc, char *argv[]) {
 
 	if(!strcmp(input, "BONJ")){
 		if(connection_client(serverId)) {
-			char waitInput[100];
+			
 			while(1) {
 				scanf("%[^\n]%*c", input);
 				if(!strcmp(input, "exit")) {
 					break;
+				} else if(is_locale_cmd(input)) {
+					printf("LOCALE CMD\n");
+				} else if (is_remote_cmd(input)) {
+					printf("REMPOTE CMD\n");
+				} else if (strcmp(input, "")) {
+					printf("UNKNOW CMD : %s\n", input);
 				}
-
-				printf("MESSAGE : %s\n", input);
 			}
-		} else {
-			printf("\nBYE\n");
 		}
+		printf("\nGOOD BYE\n");
 	} else if (!strcmp(input, "exit")) {
 		printf("\nGOOD BYE\n");
 	} else {
