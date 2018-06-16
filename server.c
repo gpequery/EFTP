@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 
 	if(!strcmp(input, "BONJ")) {
 		if(connection_server(newClientId)) {
-			printf("COOOOL SERVER\n");
+			printf("\nClient identifié\n");
 		}
 	}
 	

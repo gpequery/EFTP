@@ -61,9 +61,9 @@ int main(int argc, char *argv[]) {
 
 	if(!strcmp(input, "BONJ")){
 		if(connection_client(serverId)) {
-			printf("WELC\n");
+			printf("\nWELC\n");
 		} else {
-			printf("BYE\n");
+			printf("\nBYE\n");
 		}
 	} else if (!strcmp(input, "exit")) {
 		printf("\nGOOD BYE\n");
