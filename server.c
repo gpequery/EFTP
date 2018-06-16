@@ -11,8 +11,6 @@
 int main(int argc, char *argv[]) {
 	printf("------------ Serveur ------------\n\n");
 
-	pthread_t recvt;
-
 	const int port = argc >= 2 ? atoi(argv[1]) : 5001;
 
 	int socketId = socket(AF_INET, SOCK_STREAM, 0);
@@ -56,6 +54,17 @@ int main(int argc, char *argv[]) {
 	if(!strcmp(input, "BONJ")) {
 		if(connection_server(newClientId)) {
 			printf("\nClient identifié\n");
+			
+			char waitInput[100];
+			while(1) {
+				printf("\nWAIT\n");
+				waitMessage(newClientId, waitInput);
+				if(!strcmp(waitInput, "exit")) {
+					break;
+				}
+			}
+		} else {
+			printf("\nClient refusé\n");
 		}
 	}
 	
@@ -64,7 +73,5 @@ int main(int argc, char *argv[]) {
 	close(socketId);
 	return EXIT_SUCCESS;
 
-	/*pthread_create(&recvt,NULL,recvmg,&newClientId);
-
-	pthread_join(recvt, NULL);*/
+	
 }

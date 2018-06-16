@@ -61,7 +61,15 @@ int main(int argc, char *argv[]) {
 
 	if(!strcmp(input, "BONJ")){
 		if(connection_client(serverId)) {
-			printf("\nWELC\n");
+			char waitInput[100];
+			while(1) {
+				scanf("%[^\n]%*c", input);
+				if(!strcmp(input, "exit")) {
+					break;
+				}
+
+				printf("MESSAGE : %s\n", input);
+			}
 		} else {
 			printf("\nBYE\n");
 		}
