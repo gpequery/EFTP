@@ -57,7 +57,6 @@ int main(int argc, char *argv[]) {
 			
 			char waitInput[100];
 			while(1) {
-				printf("\nWAIT\n");
 				waitMessage(newClientId, waitInput);
 				if(!strcmp(waitInput, "exit")) {
 					break;

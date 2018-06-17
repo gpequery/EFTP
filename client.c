@@ -4,9 +4,9 @@
 #include <netdb.h>
 #include <stdbool.h>
 #include <pthread.h>
+#include <unistd.h>
 #include "threads.h"
 #include "functions.h"
-#include <unistd.h>
 
 /*void *recvmg(void *sock)
 {
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	printf("\nConnexion avec le serveur réussis !\n");
+	printf("\nConnexion avec le serveur réussis !\n\n");
 	
 	char input[100];
 	scanf("%[^\n]%*c", input);
@@ -63,16 +63,17 @@ int main(int argc, char *argv[]) {
 		if(connection_client(serverId)) {
 			
 			while(1) {
-				scanf("%[^\n]%*c", input);
+				writeMessage(input);
 				if(!strcmp(input, "exit")) {
 					break;
 				} else if(is_locale_cmd(input)) {
-					printf("LOCALE CMD\n");
+					exec_local_cmd(input);
 				} else if (is_remote_cmd(input)) {
 					printf("REMPOTE CMD\n");
 				} else if (strcmp(input, "")) {
 					printf("UNKNOW CMD : %s\n", input);
 				}
+				printf("\n");
 			}
 		}
 		printf("\nGOOD BYE\n");
@@ -81,21 +82,6 @@ int main(int argc, char *argv[]) {
 	} else {
 		printf("\nServer wait BONJ \n");
 	}
-	/*char msg[500];
-	while(fgets(msg,500,stdin) > 0) {
-		printf("MESSAGE : %s", msg);
-		sendMessage(socketId, msg);
-	}*/
-
-	/* Thread Listen message create */
-	/*pthread_t threadListenMessage;
-	if (pthread_create(&threadListenMessage, NULL, thread_listen_message, &serverId)) {
-		printf("pthread_create thread_listen_message");
-	}*/
-
-	//pthread_create(&recvt,NULL,recvmg,&socketId);
-	//pthread_join(recvt,NULL);
-	
 
 	printf("\n------------ END ------------\n");
 
