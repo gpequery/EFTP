@@ -61,7 +61,6 @@ int main(int argc, char *argv[]) {
 
 	if(!strcmp(input, "BONJ")){
 		if(connection_client(serverId)) {
-			
 			while(1) {
 				writeMessage(input);
 				if(!strcmp(input, "exit")) {
@@ -69,7 +68,12 @@ int main(int argc, char *argv[]) {
 				} else if(is_locale_cmd(input)) {
 					exec_local_cmd(input);
 				} else if (is_remote_cmd(input)) {
-					printf("REMPOTE CMD\n");
+					sendMessage(serverId, input);
+
+					char waitInput[1000];
+					while (strcmp(input, "EOF")) {
+						waitMessage(serverId, waitInput);
+					}
 				} else if (strcmp(input, "")) {
 					printf("UNKNOW CMD : %s\n", input);
 				}

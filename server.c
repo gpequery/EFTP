@@ -5,6 +5,8 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <fcntl.h>
 #include "threads.h"
 #include "functions.h"
 
@@ -60,6 +62,8 @@ int main(int argc, char *argv[]) {
 				waitMessage(newClientId, waitInput);
 				if(!strcmp(waitInput, "exit")) {
 					break;
+				} else if(is_remote_cmd(waitInput)) {
+					exec_remote_cmd(newClientId, waitInput);
 				}
 			}
 		} else {
