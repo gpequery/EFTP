@@ -3,30 +3,15 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <stdbool.h>
-#include <pthread.h>
 #include <unistd.h>
-#include "threads.h"
-#include "functions.h"
-
-/*void *recvmg(void *sock)
-{
-	int their_sock = *((int *)sock);
-	char msg[500];
-	int len;
-	while((len = recv(their_sock,msg,500,0)) > 0) {
-		msg[len] = '\0';
-		fputs(msg,stdout);
-		memset(msg,'\0',sizeof(msg));
-	}
-}*/
-
+#include "fGlob.h"
+#include "fClient.h"
 
 int main(int argc, char *argv[]) {
 	printf("------------ Client ------------\n\n");
 
 	const char* serverIp = argc >= 2 ? argv[1] : "localhost";
 	const int port = argc >= 3 ? atoi(argv[2]) : 5001;
-	pthread_t recvt;
 
 	int socketId = socket(AF_INET, SOCK_STREAM, 0);
 	if(socketId < 0) {
@@ -69,9 +54,15 @@ int main(int argc, char *argv[]) {
 					exec_local_cmd(input);
 				} else if (is_remote_cmd(input)) {
 					sendMessage(serverId, input);
-
-					char waitInput[1000];
-					while (strcmp(input, "EOF")) {
+					
+					
+					if(!strcmp(input, "rls")) {
+						char waitInput[1000];
+						while (strcmp(input, "EOF")) {
+							waitMessage(serverId, waitInput);
+						}
+					} else if(!strcmp(input, "rcd")) {
+						char waitInput[50];
 						waitMessage(serverId, waitInput);
 					}
 				} else if (strcmp(input, "")) {

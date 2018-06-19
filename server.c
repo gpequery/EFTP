@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-#include "threads.h"
-#include "functions.h"
+#include "fGlob.h"
+#include "fRemo.h"
 
 int main(int argc, char *argv[]) {
 	printf("------------ Serveur ------------\n\n");
