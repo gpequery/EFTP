@@ -16,7 +16,7 @@ void sendMessage(int idToSend, char* message) {
 int waitMessage(int idFrom, char* var) {
 	memset(var, 0, sizeof(var));
 
-	int result = recv(idFrom, var, sizeof(var), 0);
+	int result = read(idFrom, var, sizeof(var));
 	printf("%s", var);
 
 	return result;
