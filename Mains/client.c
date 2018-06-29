@@ -58,9 +58,11 @@ int main(int argc, char *argv[]) {
 
 					if(!strcmp(input, "rls")) {
 						char waitInput[1000];
-						while (strcmp(input, "EOF")) {
+						while (strcmp(waitInput, "\n")) {
+							printf("\n");
 							waitMessage(serverId, waitInput);
 						}
+						printf("\n");
 					} else if(!strcmp(input, "rcd")) {
 						char waitInput[50];
 						waitMessage(serverId, waitInput);

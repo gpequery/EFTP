@@ -41,7 +41,7 @@ bool verify_identifiant(char* loginSearch, char* pwdSearch) {
 		char row[100];
 		while(fgets(row, 100, file) != NULL) {
 			char *login = strtok(row, " ");
-    			char *pwd = strtok(NULL, "\n");
+			char *pwd = strtok(NULL, "\n");
 
 			if(!strcmp(pwdSearch, pwd)){
 				return true;
@@ -77,12 +77,19 @@ void exec_remote_cmd(int clientId, char* cmd) {
 		char result[1000];
 		if (file_tmp != NULL) {
 			char row[30];
+			char* result;
+
+sendMessage(clientId, "COUCOU COUCOU");
 			while(fgets(row, 30, file_tmp) != NULL) {
-				sendMessage(clientId, row);
+				char *tmp = strtok(row, "\n");
+				if(strcmp(tmp, "tmp")){
+						sendMessage(clientId, tmp);
+				}
 			}
-			sendMessage(clientId, "EOF");
+
+			sendMessage(clientId, "\n");
 			fclose(file_tmp);
-	    	}
+  	}
 		remove("tmp");
 	} else if (!strcmp(cmd, "rcd")) {
 		char path[20];
